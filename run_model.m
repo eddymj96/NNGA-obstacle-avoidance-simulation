@@ -9,7 +9,7 @@ clc;
 %----------------------------------------------%
 % Setup Simulation
 Vl = 6;
-Vr = 6;
+Vr = -6;
 sim_time = 3;
 dT = 0.05;
 xi = zeros(1,24); % intial state for x
@@ -45,20 +45,18 @@ wall2 = wallObject(-3, -2, -3, 2);
 %----------------------------------------------%
 
 %----------------------------------------------%
+
 euler = @(x, x_dot, dt)x + (x_dot*dt); % Euler intergration
 Va = [Vl; Vl; Vr; Vr];
 vehicle = robot(xi, Va, 0, 0, 0, 0, dT, sim_time);
+
 for outer_loop = 1:(sim_time/dT)
 
     %----------------------------------------------%
     % Run Model
 
-    [xdot, xi] = full_mdl_motors(Va,xi,0,0,0,0,dT);  
     vehicle.update(euler)
-        xi = xi + (xdot*dT); % Euler intergration
-    % Store varibles
-        xdo(outer_loop,:) = xdot;
-        xio(outer_loop,:) = xi;
+
     %----------------------------------------------%
     
     %----------------------------------------------%
@@ -76,7 +74,11 @@ end
 
 %----------------------------------------------%
 %Plot Variables
-figure(2); plot(xio(:,20),xio(:,19));
-figure(3); plot(xio(:,19));
-figure(4); plot(xio(:,24));
+
+figure(2); plot(vehicle.x_matrix(20, :),vehicle.x_matrix(19, :)); xlabel('y, m'); ylabel('x, m');
+
+figure(3); plot(vehicle.x_matrix(19, :)); xlabel('x, m');
+
+figure(4);plot(vehicle.x_matrix(24, :)); xlabel('psi, m'); 
+
 %----------------------------------------------%

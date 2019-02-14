@@ -268,5 +268,9 @@ classdef robot < handle
             obj.xdot(23) = thetadot;
             obj.xdot(24) = psidot;
         end
+        
+        function plotx(obj)
+            
+        end
     end
 end
