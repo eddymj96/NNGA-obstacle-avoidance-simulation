@@ -14,8 +14,8 @@ ypos = cur_y;
 distance  = 0;
 cur_nearest_l  = 500;
 %for j = 1:41,
-for j = 1:21,
-    for k = 1:100,
+for j = 1:21
+    for k = 1:100
         sensor_range = k/100;
         
         % Get Point
@@ -53,15 +53,15 @@ for j = 1:21,
                 cur_nearest_l = distance;
             end
    
-        end;
-    end;
-end;
+        end
+    end
+end
 
 distance  = 0;
 cur_nearest_r  = 500;
 
-for j = 21:41,
-    for k = 1:100,
+for j = 21:41
+    for k = 1:100
         sensor_range = k/100;
         
         % Get Point
@@ -98,17 +98,17 @@ for j = 21:41,
             if (distance < cur_nearest_r)
                 cur_nearest_r = distance;
             end
-        end;
-    end;
-end;
+        end
+    end
+end
 
 if(cur_nearest_l > 100)
     cur_nearest_l = 1;
-end;
+end
 
 if(cur_nearest_r > 100)
     cur_nearest_r = 1;
-end;
+end
 
 sensorout = [cur_nearest_l cur_nearest_r];
 %---------------------------------------------------------------------%
