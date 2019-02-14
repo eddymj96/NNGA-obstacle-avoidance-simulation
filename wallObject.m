@@ -1,4 +1,4 @@
-classdef wallObject
+classdef wallObject < handle
     
     properties 
         starting_x

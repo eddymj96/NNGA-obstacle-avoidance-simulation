@@ -24,47 +24,50 @@ max_y = 10;
 
 Obs_Matrix = zeros(max_x/0.01,max_y/0.01);
 
-wall = WallGeneration1(-1, 1,1.2,1.2,'h');
-wall2 = WallGeneration1(-3, -3, -2, 2,'v');
+wall = wallObject(-1, 1.2,1,1.2);
+wall2 = wallObject(-3, -2, -3, 2);
 
-for x=1:length(wall)
-    
-    xpos = (wall(x,1)/0.01)+((max_x/2)/0.01);
-    ypos = (wall(x,2)/0.01)+((max_y/2)/0.01);
-    
-    Obs_Matrix(ypos,xpos) = 1;
-end
-
-for x=1:length(wall2)
-    
-    xpos = (wall2(x,1)/0.01)+((max_x/2)/0.01);
-    ypos = (wall2(x,2)/0.01)+((max_y/2)/0.01);
-    
-    Obs_Matrix(ypos,xpos) = 1;
-end
+% for x=1:length(wall)
+%     
+%     xpos = (wall(x,1)/0.01)+((max_x/2)/0.01);
+%     ypos = (wall(x,2)/0.01)+((max_y/2)/0.01);
+%     
+%     Obs_Matrix(ypos,xpos) = 1;
+% end
+% 
+% for x=1:length(wall2)
+%     
+%     xpos = (wall2(x,1)/0.01)+((max_x/2)/0.01);
+%     ypos = (wall2(x,2)/0.01)+((max_y/2)/0.01);
+%     
+%     Obs_Matrix(ypos,xpos) = 1;
+% end
 %----------------------------------------------%
 
 %----------------------------------------------%
+euler = @(x, x_dot, dt)x + (x_dot*dt); % Euler intergration
+Va = [Vl; Vl; Vr; Vr];
+vehicle = robot(xi, Va, 0, 0, 0, 0, dT, sim_time);
 for outer_loop = 1:(sim_time/dT)
 
     %----------------------------------------------%
     % Run Model
-    Va = [Vl; Vl; Vr; Vr];
-    [xdot, xi] = full_mdl_motors(Va,xi,0,0,0,0,dT);   
-    xi = xi + (xdot*dT); % Euler intergration
-    
+
+    [xdot, xi] = full_mdl_motors(Va,xi,0,0,0,0,dT);  
+    vehicle.update(euler)
+        xi = xi + (xdot*dT); % Euler intergration
     % Store varibles
-    xdo(outer_loop,:) = xdot;
-    xio(outer_loop,:) = xi;
+        xdo(outer_loop,:) = xdot;
+        xio(outer_loop,:) = xi;
     %----------------------------------------------%
     
     %----------------------------------------------%
     figure(1);
     clf; hold on; grid on; axis([-5,5,-5,5]);
-    drawrobot(0.2,xi(20),xi(19),xi(24),'b');
+    drawrobot(0.2,vehicle.y,vehicle.xx, vehicle.psi,'b');
     xlabel('y, m'); ylabel('x, m');
-    plot(wall(:,1),wall(:,2),'k-');
-    plot(wall2(:,1),wall2(:,2),'k-');
+    wall.plot();
+    wall2.plot();
     pause(0.001);
     %----------------------------------------------%
     
