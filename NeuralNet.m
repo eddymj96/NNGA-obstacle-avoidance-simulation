@@ -11,8 +11,8 @@ classdef NeuralNet
         end
         
         function outputs = resolve(obj, inputs)
-            for i= 1:length(obj.layers)
-                inputs = layer.resolve(inputs);
+            for i = 1:length(obj.layers)
+                inputs = obj.layers(i).resolve(inputs);
             end
             outputs = inputs;
         end

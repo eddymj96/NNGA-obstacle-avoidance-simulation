@@ -14,7 +14,8 @@ classdef perceptron < handle
         
         function output = input(obj, inputs)
             obj.inputs = inputs;
-            output = obj.tolerenceFunction(inputs.*obj.weights);
+            output = obj.tolerenceFunction(inputs, obj.weights);
+            obj.output = output;
         end
         
     end
