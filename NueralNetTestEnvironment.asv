@@ -4,7 +4,11 @@ clear all;
 close all;
 
 % ---------Constructing the neural net----------
-fun = @toleranceFunction;
+%-----------------------------------------------
+
+% Define the activation function in terms of two inputs 
+% The inputs 
+fun = @(inputs, weights)sigmf(inputs.*weights, [1,1]);
 
 % for i = 1:2
 %     perceptrons(i) = perceptron(2, fun);
@@ -16,16 +20,16 @@ fun = @toleranceFunction;
 % end
 % layer2 = neuralLayer(perceptrons2);
 
-layerArray = [2, 2, 3];
+layerArray = [2, 2, 3, 2]; % Specify Number of layers and number neurons, first term is the input number
 
-neuralNetCreator(layerArray, @perceptron, fun)
+myNet = neuralNetCreator(layerArray, @perceptron, fun);
 
 
     
 function output = toleranceFunction(inputs, weights)
-    if sum(inputs.*weights) < 1.5
+    if sum(inputs.*weights) < 0.5
         output = 0;
-    elseif sum(inputs.*weights) < 3
+    elseif sum(inputs.*weights) < 1
         output = 0.5;
     else 
         output = 1;
@@ -34,13 +38,13 @@ end
 
 function net = neuralNetCreator(layerArray, neuronType, toleranceFunction)
     
-    for i = 1:length(layerArray)
+    for i = 2:length(layerArray)
 
-        for j = 1:layerArray(i+1)
-                neurons(j) = neuronType(layerArray, toleranceFunction);
+        for j = 1:layerArray(i)
+                neurons(j) = neuronType(layerArray(i-1), toleranceFunction);
         end
 
-        layers(i) = neuralLayer(neurons);
+        layers(i-1) = neuralLayer(neurons);
         clear neurons;
     end
     

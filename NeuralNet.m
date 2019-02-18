@@ -6,7 +6,18 @@ classdef NeuralNet
     end
     
     methods
-        function obj = NeuralNet(layers)
+        function obj = NeuralNet(layerArray, neuronType, toleranceFunction)
+        for i = 2:length(layerArray)
+
+            for j = 1:layerArray(i)
+                    neurons(j) = neuronType(layerArray(i-1), toleranceFunction);
+            end
+
+            layers(i-1) = neuralLayer(neurons);
+            clear neurons;
+            
+        end
+        
             obj.layers = layers;
         end
         

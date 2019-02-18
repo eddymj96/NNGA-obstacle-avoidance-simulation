@@ -15,6 +15,7 @@ classdef neuralLayer < handle
         function outputArray = resolve(obj, inputArray)
             outputArray = zeros(1,obj.neuronNo);
             for i = 1:obj.neuronNo
+                
                 outputArray(i) = obj.neurons(i).input(inputArray);
             end
         end

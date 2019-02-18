@@ -9,7 +9,7 @@ clc;
 %----------------------------------------------%
 % Setup Simulation
 Vl = 6;
-Vr = -6;
+Vr = 6;
 sim_time = 3;
 dT = 0.05;
 xi = zeros(1,24); % intial state for x
@@ -62,6 +62,7 @@ for outer_loop = 1:(sim_time/dT)
     %----------------------------------------------%
     figure(1);
     clf; hold on; grid on; axis([-5,5,-5,5]);
+    daspect([1 1 1]); % Keeps the aspect ratio equal
     drawrobot(0.2,vehicle.y,vehicle.xx, vehicle.psi,'b');
     xlabel('y, m'); ylabel('x, m');
     wall.plot();
