@@ -27,21 +27,21 @@ Obs_Matrix = zeros(max_x/0.01,max_y/0.01);
 wall = wallObject(-1, 1.2,1,1.2);
 wall2 = wallObject(-3, -2, -3, 2);
 
-% for x=1:length(wall)
-%     
-%     xpos = (wall(x,1)/0.01)+((max_x/2)/0.01);
-%     ypos = (wall(x,2)/0.01)+((max_y/2)/0.01);
-%     
-%     Obs_Matrix(ypos,xpos) = 1;
-% end
-% 
-% for x=1:length(wall2)
-%     
-%     xpos = (wall2(x,1)/0.01)+((max_x/2)/0.01);
-%     ypos = (wall2(x,2)/0.01)+((max_y/2)/0.01);
-%     
-%     Obs_Matrix(ypos,xpos) = 1;
-% end
+for x=1:length(wall)
+    
+    xpos = (wall(x,1)/0.01)+((max_x/2)/0.01);
+    ypos = (wall(x,2)/0.01)+((max_y/2)/0.01);
+    
+    Obs_Matrix(ypos,xpos) = 1;
+end
+
+for x=1:length(wall2)
+    
+    xpos = (wall2(x,1)/0.01)+((max_x/2)/0.01);
+    ypos = (wall2(x,2)/0.01)+((max_y/2)/0.01);
+    
+    Obs_Matrix(ypos,xpos) = 1;
+end
 %----------------------------------------------%
 
 %----------------------------------------------%
@@ -68,6 +68,8 @@ for outer_loop = 1:(sim_time/dT)
     wall.plot();
     wall2.plot();
     pause(0.001);
+   
+
     %----------------------------------------------%
     
 end

@@ -19,7 +19,7 @@ for j = 1:21
         sensor_range = k/100;
         
         % Get Point
-        theta = ((j-20)*(pi/180))+psi;
+        theta = ((j-20)*(pi/180))+ psi;
         xpt = round(100*(xpos+(sensor_range*cos(theta))));
         ypt = round(100*(ypos+(sensor_range*sin(theta))));
         
