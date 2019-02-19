@@ -27,12 +27,7 @@ classdef PerfectObservationSensor < handle
                 dr = norm([dx, dy]);
                 
                 D = det([obj.ObstacleMatrix(i).starting_x,  obj.ObstacleMatrix(i).end_x; obj.ObstacleMatrix(i).starting_y,  obj.ObstacleMatrix(i).end_y]);
-                x_int1 = (D*dy + sign(dy)*dx*sqrt(((r^2)*(dr^2)) - D^2))/(dr^2);
-                x_int2 = (D*dy + sign(dy)*dx*sqrt(((r^2)*(dr^2)) - D^2))/(dr^2);
-                
-                y_int1 = (-D*dx + abs(dy)*sqrt(((r^2)*(dr^2)) - D^2))/(dr^2);
-                y_int2 = (-D*dx - abs(dy)*sqrt(((r^2)*(dr^2)) - D^2))/(dr^2);
-                
+                x_int = D*dy + sign(dy)*dx*sqrt(r*)
             end
             
             
