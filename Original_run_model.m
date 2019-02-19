@@ -8,7 +8,7 @@ clc;
 
 %----------------------------------------------%
 % Setup Simulation
-Vl = 6;
+Vl = -6;
 Vr = 6;
 sim_time = 3;
 dT = 0.05;
@@ -66,7 +66,10 @@ for outer_loop = 1:(sim_time/dT)
     plot(wall(:,1),wall(:,2),'k-');
     plot(wall2(:,1),wall2(:,2),'k-');
     pause(0.001);
-    sensorout = ObsSensor1(xi(19),xi(20),[0.2 0],xi(24),Obs_Matrix)
+
+    
+
+
     %----------------------------------------------%
     
 end

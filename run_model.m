@@ -68,6 +68,7 @@ for outer_loop = 1:(sim_time/dT)
     wall.plot();
     wall2.plot();
     pause(0.001);
+
    
 
     %----------------------------------------------%
