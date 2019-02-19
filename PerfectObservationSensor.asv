@@ -50,7 +50,7 @@ classdef PerfectObservationSensor < handle
                 if (r*dr)^2 - Dp^2 > 0 % Discriminant, postive = intersections, negative = no intersections
                 
                     x_int1 = (D*dy + sign(dy)*dx*sqrt(((r^2)*(dr^2)) - D^2))/(dr^2);
-                    x_int2 = (D*dy - sign(dy)*dx*sqrt(((r^2)*(dr^2)) - D^2))/(dr^2);
+                    x_int2 = (D*dy + sign(dy)*dx*sqrt(((r^2)*(dr^2)) - D^2))/(dr^2);
 
                     y_int1 = (-D*dx + abs(dy)*sqrt(((r^2)*(dr^2)) - D^2))/(dr^2);
                     y_int2 = (-D*dx - abs(dy)*sqrt(((r^2)*(dr^2)) - D^2))/(dr^2);
@@ -106,21 +106,19 @@ classdef PerfectObservationSensor < handle
                         
                         x_limits = [x1, x2];
                         y_limits = [y1, y2];
-                        
-                        [Min, I1] = min(x_limits);
-                        [Max, I2] = max(x_limits);
+                            
                             % Intersection is in arc and therefore mid point
                             % lies b
 
                         % Calculate the midpoint of and the shortest distance 
 
-                        if x_array(1) > Max || x_array(2) < Min
+                        if Min > max(x_limits) || Max < min(x_limits)
                             % Wall lies outside of range
                             output = [1, 1];
                         else
                             
-                            if Min < x_array(2)
-                                x_array(2) = x_limits(I1);
+                            if Min < min(x_limits)
+                                x_array(I1) = x_limits(I1);
                                 y_array(I1) = y_limits(I1);
                             elseif Max < max(x_limits)
                                 x_array(I2) = x_limits(I2);
