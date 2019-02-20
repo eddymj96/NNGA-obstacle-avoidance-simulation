@@ -101,30 +101,29 @@ classdef PerfectObservationSensor < handle
                             RightLimit = [x_array(I2), y_array(I2)];
                         end
                         
+                        % New limits based on sensor cone geoemetry limits 
                         x_array = [LeftLimit(1), RightLimit(1)];
                         y_array = [LeftLimit(2), RightLimit(2)];
                         
+                        % Wall edges
                         x_limits = [x1, x2];
                         y_limits = [y1, y2];
                         
-                        [Min, I1] = min(x_limits);
-                        [Max, I2] = max(x_limits);
-                            % Intersection is in arc and therefore mid point
-                            % lies b
+                        % Left most and right most edges respectively
+                        [objMin, I1] = min(x_limits);
+                        [objMax, I2] = max(x_limits);
 
-                        % Calculate the midpoint of and the shortest distance 
-
-                        if x_array(1) > Max || x_array(2) < Min
+                        if x_array(1) > objMax || x_array(2) < objMin
                             % Wall lies outside of range
                             output = [1, 1];
                         else
                             
-                            if Min < x_array(2)
-                                x_array(2) = x_limits(I1);
-                                y_array(I1) = y_limits(I1);
-                            elseif Max < max(x_limits)
-                                x_array(I2) = x_limits(I2);
-                                y_array(I2) = y_limits(I2);
+                            if objMin > x_array(1)
+                                x_array(1) = x_limits(I1);
+                                y_array(1) = y_limits(I1);
+                            elseif objMax < max(x_limits)
+                                x_array(2) = x_limits(I2);
+                                y_array(2) = y_limits(I2);
                             end
                             
                             
@@ -148,6 +147,7 @@ classdef PerfectObservationSensor < handle
         function angle =  VectorAngle(v1, v2)
             angle = acos(dot(v1, v2)/(norm(v1)*norm(v2)));
         end
+        
         end
     
         
