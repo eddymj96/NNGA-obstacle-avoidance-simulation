@@ -2,26 +2,26 @@ classdef PerfectObservationSensor < handle
     properties
         ObstacleMatrix;
         sensorPosition;
-        alhpa;
+        alpha;
         d_limit;
     end
     
     methods
-        function obj = ObservationSensor(ObstacleMatrix, sensorPosition, sensorAngleLimit, sensorDistanceLimit)
+        function obj = PerfectObservationSensor(ObstacleMatrix, sensorPosition, sensorAngleLimit, sensorDistanceLimit)
             obj.ObstacleMatrix = ObstacleMatrix;
             obj.sensorPosition = sensorPosition;
             obj.alpha = sensorAngleLimit;
             obj.d_limit = sensorDistanceLimit;
         end
         
-        function output = detect(x_current, y_current, heading)
+        function output = detect(obj,x_current, y_current, heading)
             xpos = x_current + obj.sensorPosition; % Assuming the previous referred to this
                                                %"+0.1" was just fixed and not a funciton of input
             ypos = y_current;
             
             psi = heading;
             rotateRight = [0, 1; -1, 0];
-            rotationMatrix = [cos(psi), -sin(psi); sin(psi), cos(psi)]*rotateRight;
+            rotationMatrix = [cos(psi +pi/2), -sin(psi); sin(psi), cos(psi)]%*rotateRight;
             
             for i = 1:length(obj.ObstacleMatrix)
                 
@@ -47,7 +47,7 @@ classdef PerfectObservationSensor < handle
                 
                 D = det([x1, x2; y1, y2]);
                 
-                if (r*dr)^2 - Dp^2 > 0 % Discriminant, postive = intersections, negative = no intersections
+                if (r*dr)^2 - D^2 > 0 % Discriminant, postive = intersections, negative = no intersections
                 
                     x_int1 = (D*dy + sign(dy)*dx*sqrt(((r^2)*(dr^2)) - D^2))/(dr^2);
                     x_int2 = (D*dy - sign(dy)*dx*sqrt(((r^2)*(dr^2)) - D^2))/(dr^2);
@@ -130,11 +130,11 @@ classdef PerfectObservationSensor < handle
                         end
           
                     end
-                   
+                   output = [x1, y1];
 
                     
                 else
-                    output = [1, 1];
+                    output = [x1, y1];
                 end
                     
 
@@ -144,7 +144,7 @@ classdef PerfectObservationSensor < handle
             
         end
             
-        function angle =  VectorAngle(v1, v2)
+        function angle =  VectorAngle(obj, v1, v2)
             angle = acos(dot(v1, v2)/(norm(v1)*norm(v2)));
         end
         
