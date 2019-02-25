@@ -1,8 +1,8 @@
 clc;
 clear all;
 clf;
-%obstacle = wallObject(5*rand(1 , 1), 5*rand(1 , 1),8*rand(1 , 1), 8*rand(1 , 1));
-obstacle = wallObject(-3, 2.95, 4.375052153639871, 2.95);
+obstacle = wallObject(5*rand(1 , 1), 5*rand(1 , 1),8*rand(1 , 1), 8*rand(1 , 1));
+%obstacle = wallObject(-3, 2.95, 4.375052153639871, 2.95);
 sensor = PerfectObservationSensor(obstacle, 0, pi/8, 3);
 
 % Generating old sensor and inputs

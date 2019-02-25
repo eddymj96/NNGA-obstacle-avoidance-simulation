@@ -83,6 +83,7 @@ classdef PerfectObservationSensor < handle
                     v2 = [x_int2, y_int2];
                     
                     
+                    
                     if (obj.VectorAngle(headingVector, v1) < pi/2 || (obj.VectorAngle(headingVector, v2) < pi/2))
                         % Line intersections
                         m1 = (y2-y1)/(x2-x1);
@@ -209,7 +210,7 @@ classdef PerfectObservationSensor < handle
             angle = acos(dot(v1, v2)/(norm(v1)*norm(v2)));
         end
         
-        function curl = Curl2D(v1, v2)
+        function curl = Curl2D(obj, v1, v2)
             curl = det([v1;v2]);
         end
         
