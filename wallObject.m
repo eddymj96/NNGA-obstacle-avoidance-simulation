@@ -22,6 +22,10 @@ classdef wallObject < handle
         function plot(obj)
             plot(obj.path(1, :), obj.path(2, :), "k-");
         end
+        
+        function inversePlot(obj)
+            plot(obj.path(2, :), obj.path(1, :), "k-");
+        end
     
     end
 end

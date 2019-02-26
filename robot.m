@@ -91,12 +91,12 @@ classdef robot < handle
         end
         
         
-        function update(obj, integrationMethod)
+        function update(obj, V, integrationMethod)
            %Store Variables
            obj.x_matrix(:, obj.step) = obj.x';
            obj.xdot_matrix(:, obj.step) = obj.xdot';
            
-           obj.updateMotors();
+           obj.updateMotors(V);
            obj.updateRobot();
            
            obj.step = obj.step + 1;
@@ -119,11 +119,11 @@ classdef robot < handle
 
         end
         
-        function updateMotors(obj)
-            [obj.xdot(1), obj.xdot(2), obj.xdot(3)] = obj.motor1.update(obj.x(1:3), obj.Va(1), obj.stepSize, obj.xtra_fric);
-            [obj.xdot(4), obj.xdot(5), obj.xdot(6)] = obj.motor2.update(obj.x(4:6), obj.Va(2), obj.stepSize, obj.xtra_fric);
-            [obj.xdot(7), obj.xdot(8), obj.xdot(9)] = obj.motor3.update(obj.x(7:9), obj.Va(3), obj.stepSize, obj.xtra_fric);
-            [obj.xdot(10), obj.xdot(11), obj.xdot(12)] = obj.motor4.update(obj.x(10:12), obj.Va(4), obj.stepSize, obj.xtra_fric);
+        function updateMotors(obj, V)
+            [obj.xdot(1), obj.xdot(2), obj.xdot(3)] = obj.motor1.update(obj.x(1:3), V(1), obj.stepSize, obj.xtra_fric);
+            [obj.xdot(4), obj.xdot(5), obj.xdot(6)] = obj.motor2.update(obj.x(4:6), V(1), obj.stepSize, obj.xtra_fric);
+            [obj.xdot(7), obj.xdot(8), obj.xdot(9)] = obj.motor3.update(obj.x(7:9), V(2), obj.stepSize, obj.xtra_fric);
+            [obj.xdot(10), obj.xdot(11), obj.xdot(12)] = obj.motor4.update(obj.x(10:12), V(2), obj.stepSize, obj.xtra_fric);
         end
         
         function updateRobot(obj)
@@ -269,6 +269,7 @@ classdef robot < handle
             obj.xdot(24) = psidot;
         end
         
+            
         function plotx(obj)
             
         end

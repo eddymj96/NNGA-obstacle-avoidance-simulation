@@ -47,6 +47,10 @@ classdef motor < handle
             end
 
         end
+        
+        function changeVoltage(obj, V)
+            obj.Va = V;
+        end
             
     end
 end

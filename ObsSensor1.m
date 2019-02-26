@@ -5,7 +5,7 @@ function sensorout = ObsSensor1(cur_x,cur_y,sensor_pos,psi,Obs_Matrix)
 
 sensorout = [0 0];
 
-xpos = cur_x+0.1;
+xpos = cur_x + 0.1;
 ypos = cur_y;
 %---------------------------------------------------------------------%
 
@@ -42,9 +42,9 @@ for j = 1:21
         % Get Value at point
         value = Obs_Matrix(mat_x,mat_y);
         if (value)
-          %  plot(t_ypt,t_xpt,'c*');
+          %  plot(t_ypt
+            % Calculate nearest distance,t_xpt,'c*');
             
-            % Calculate nearest distance
             x_dis = abs(t_xpt)-abs(xpos);
             y_dis = abs(t_ypt)-abs(ypos);
             

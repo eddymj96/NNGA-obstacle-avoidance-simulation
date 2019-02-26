@@ -8,7 +8,7 @@ clc;
 
 %----------------------------------------------%
 % Setup Simulation
-Vl = -6;
+Vl = 6;
 Vr = 6;
 sim_time = 3;
 dT = 0.05;
@@ -45,11 +45,15 @@ end
 %----------------------------------------------%
 
 %----------------------------------------------%
+tic
 for outer_loop = 1:(sim_time/dT)
 
     %----------------------------------------------%
     % Run Model
-    Va = [Vl; Vl; Vr; Vr];
+    %Va = [Vl; Vl; Vr; Vr];
+    sensorOut = ObsSensor1(xi(19),xi(20),[0.2 0],xi(24),Obs_Matrix);
+    Va(1:2) = sensorOut(1);
+    Va(3:4) = sensorOut(2);
     [xdot, xi] = full_mdl_motors(Va,xi,0,0,0,0,dT);   
     xi = xi + (xdot*dT); % Euler intergration
     
@@ -61,11 +65,13 @@ for outer_loop = 1:(sim_time/dT)
     %----------------------------------------------%
     figure(1);
     clf; hold on; grid on; axis([-5,5,-5,5]);
+    
+    daspect([1 1 1]);
     drawrobot(0.2,xi(20),xi(19),xi(24),'b');
     xlabel('y, m'); ylabel('x, m');
     plot(wall(:,1),wall(:,2),'k-');
     plot(wall2(:,1),wall2(:,2),'k-');
-    pause(0.001);
+    %pause(0.001);
 
     
 
@@ -73,11 +79,12 @@ for outer_loop = 1:(sim_time/dT)
     %----------------------------------------------%
     
 end
+toc
 %----------------------------------------------%
 
 %----------------------------------------------%
 %Plot Variables
-figure(2); plot(xio(:,20),xio(:,19));
-figure(3); plot(xio(:,19));
-figure(4); plot(xio(:,24));
+figure(2); plot(xio(:,20),xio(:,19)); xlabel('y, m'); ylabel('x, m');
+figure(3); plot(xio(:,19)); xlabel('x, m');
+figure(4); plot(xio(:,24));xlabel('psi, rad');
 %----------------------------------------------%
