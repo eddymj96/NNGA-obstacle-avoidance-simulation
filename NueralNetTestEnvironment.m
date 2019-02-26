@@ -12,7 +12,7 @@ close all;
 
 fun = @(inputs, weights)sigmf(sum(inputs.*weights), [1,1]);
 
-layerArray = [2, 2, 3, 2]; % Specify Number of layers and number neurons, first term is the input number
+layerArray = [7, 5, 3, 2]; % Specify Number of layers and number neurons, first term is the input number
 
 myNet = NeuralNet(layerArray, @perceptron, fun);
 
