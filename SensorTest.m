@@ -24,16 +24,14 @@ end
 hold on
 % Use tic toc functions to time, and for loop to have large sample set
 tic
-
 %for i = 1:1000
-sensor.detect(0, 0, pi/2 + 0.2)
+sensor.detect(0, 0, pi/2 + i/5)
 %end
 toc 
 
 tic
-
 %for i = 1:1000
-sensorout = ObsSensor1(0, 0, 0, -0.2, Obs_Matrix);
+sensorout = ObsSensor1(0, 0, 0, -i/5, Obs_Matrix);
 %end
 toc
 
