@@ -7,9 +7,17 @@ classdef perceptron < handle
     end
     
     methods
-        function obj = perceptron(inputNo, tolerenceFunction)
+        
+        function obj = perceptron(inputNo, tolerenceFunction, weights)
+            
             obj.tolerenceFunction = tolerenceFunction;
-            obj.weights = rand(1, inputNo);
+            
+            if isempty(weights)
+                obj.weights = rand(1, inputNo);
+            else
+                obj.weights = weights;
+            end
+                
         end
         
         function output = input(obj, inputs)
