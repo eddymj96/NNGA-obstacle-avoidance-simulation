@@ -2,7 +2,7 @@ clear all;
 close all;
 clc;
 
-sim_time = 15;
+sim_time = 10;
 dT = 0.05;
 Vl = 6;
 Vr = 6;
@@ -12,6 +12,7 @@ euler = @(x, x_dot, dt)x + (x_dot*dt); % Euler intergration
 
 
 obstacles = [wallObject(1.2, -1, 1.2, 1), wallObject(4, -3, 4, 1), wallObject(-5, -3, 2, -3), wallObject(-3, 2, 1, 2), ];
+obstacles = [wallObject(-5, -3, 2, -3)];
 sensor = PerfectObservationSensor(obstacles, 0.1, pi/8, 1);
 % hold on
 % grid on
@@ -20,27 +21,28 @@ sensor = PerfectObservationSensor(obstacles, 0.1, pi/8, 1);
 % end
 % axis([-5,5,-5,5]);
 
-populationSize = 20;
-breedingSize = 3;
-generations = 25;
+populationSize = 30;
+breedingSize = 6;
+generations = 10;
 xi = zeros(1,24);
 xi(19) = -2;
 xi(20) = -1;
 
 fun = @(inputs, weights)sigmf(sum(inputs.*weights), [1,1]);
-layerArray = [7, 5, 3, 2]; 
+fun2 = @(inputs, weights)tanh(sum(inputs.*weights));
+layerArray = [5, 2]; 
 
 
 
 for i = 1:populationSize
-    NeuralNets(i) = NeuralNet(layerArray, @perceptron, fun, []);
+    NeuralNets(i) = NeuralNet(layerArray, @perceptron, fun2, []);
 end
 destination = [3.5, 2.5];
 
-inputs = zeros(7, populationSize);
+inputs = zeros(length(layerArray), populationSize);
 
 for g = 1:generations 
-collisions = zeros(1, populationSize);
+
     for i = 1:populationSize
         vehicles(i) = robot(xi, Va, 0, 0, 0, 0, dT, sim_time);
     end
@@ -51,21 +53,28 @@ collisions = zeros(1, populationSize);
 
         %----------------------------------------------%
         % Run Model
-
-        inputs(1, :) = cell2mat({vehicles.psi}) - atan((cell2mat({vehicles.y}) - 2.5)./ (cell2mat({vehicles.xx}) - 3.5));
-        inputs(2, :) = sqrt((cell2mat({vehicles.y}) - 2.5).^2 + (cell2mat({vehicles.xx}) - 3.5).^2);
-
+        headingError = cell2mat({vehicles.psi}) - atan((cell2mat({vehicles.y}) - 2.5)./ (cell2mat({vehicles.xx}) - 3.5));
+        v1 = [cos([vehicles.psi])', sin([vehicles.psi])'];
+        v2 = [(3.5 - [vehicles.xx])', (2.5 - [vehicles.y] )'];
+        error2 = vectorAngle(v1, v2);%.*curl2D(v1, v2) + pi/2;
+        inputs(1, :) = 2*error2;
+        inputs(2, :) =  curl2D(v1, v2);
+        inputs(3, :) = sqrt((cell2mat({vehicles.y}) - 2.5).^2 + (cell2mat({vehicles.xx}) - 3.5).^2);
+        distanceError = sqrt((cell2mat({vehicles.y}) - 2.5).^2 + (cell2mat({vehicles.xx}) - 3.5).^2);
+        v = v2.^2;
+        error3 = sqrt(v(:, 1) + v(:, 2));
+        
 
 
         for j = 1:length(vehicles)
 
-            inputs(3, j) = sqrt(vehicles(j).xdot(20)^2 + vehicles(j).xdot(19)^2);
-            inputs(4, j) = sqrt(vehicles(j).xdot(13)^2 + vehicles(j).xdot(14)^2);
-            inputs(5, j) = vehicles(j).xdot(14);
+            %inputs(3, j) = sqrt(vehicles(j).xdot(20)^2 + vehicles(j).xdot(19)^2);
+            %inputs(3, j) = sqrt(vehicles(j).xdot(13)^2 + vehicles(j).xdot(14)^2);
+            %inputs(3, j) = vehicles(j).xdot(14);
             V = sensor.detect(vehicles(j).xx, vehicles(j).y, vehicles(j).psi);
-            inputs(6, j) = V(1);
-            inputs(7, j) = V(2);
-            output = 15*(0.5-NeuralNets(j).resolve(inputs(:, j)'));
+            inputs(4, j) = -V(1);
+            inputs(5, j) = -V(2);
+            output = -15*(0.5-NeuralNets(j).resolve(inputs(:, j)'));
             vehicles(j).update(output', euler);
         end
         
@@ -79,7 +88,7 @@ collisions = zeros(1, populationSize);
     ranking = fitness(vehicles, destination, collisions)
     topSelection = ranking(1:breedingSize, 3);
     parents = NeuralNets(topSelection);
-    NeuralNets = breed(parents, populationSize, layerArray, fun);
+    NeuralNets = breed(parents, populationSize, layerArray, fun2);
     
     figure(g);
     hold on; grid on; axis([-5,5,-5,5]); 
@@ -137,8 +146,8 @@ function collisions = collisionCheck(obstacles, vehicles)
     c =  -(b'.*[obstacles.starting_y] + a'.*[obstacles.starting_x])';
     
     d = abs(a*[vehicles.xx] + b*[vehicles.y] + c)./sqrt(a.^2 + b.^2);
-   % d_1 = ([obstacles.starting_y] - [obstacles.end_y])'*[vehicles.xx] - ([obstacles.starting_x] - [obstacles.end_x])'*[vehicles.y ] + ([obstacles.starting_x].*[obstacles.end_y])'- ([obstacles.starting_y].*[obstacles.end_x])';
-   % d_2 = abs(d_1)./sqrt(([obstacles.starting_y] - [obstacles.end_y]).^2 + ([obstacles.starting_x] - [obstacles.end_x]).^2)';
+    % d_1 = ([obstacles.starting_y] - [obstacles.end_y])'*[vehicles.xx] - ([obstacles.starting_x] - [obstacles.end_x])'*[vehicles.y ] + ([obstacles.starting_x].*[obstacles.end_y])'- ([obstacles.starting_y].*[obstacles.end_x])';
+    % d_2 = abs(d_1)./sqrt(([obstacles.starting_y] - [obstacles.end_y]).^2 + ([obstacles.starting_x] - [obstacles.end_x]).^2)';
     lineCollisions = (d < 0.02);
     if any([vehicles.y] > -3.2) && any([vehicles.y] < -2.9)
         
@@ -161,3 +170,21 @@ function NeuralChildren = breed(NeuralParents, childrenNo, layerArray, fun)
         NeuralChildren(i) = NeuralNet(layerArray, @perceptron, fun, NeuralParents);
     end
 end
+
+function alpha = vectorAngle(v1, v2)
+   v = v1.*v2;
+   dots = v(:,1) + v(:, 2);
+   
+   norm = sqrt((v1(:, 1).^2 + v1(:, 2).^2).*(v2(:, 1).^2 + v2(:, 2).^2));
+   alpha = acos(dots./norm);
+end
+
+function dir = curl2D(v1, v2)
+    
+    v1(:, 1) = -v1(:, 1);
+    dir = v1.*flip(v2, 2);
+    dir  = sign(dir(:, 1) + dir(:, 2));
+end
+
+
+

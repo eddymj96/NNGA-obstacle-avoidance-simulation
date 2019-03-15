@@ -17,8 +17,11 @@ classdef NeuralNet
                     if isempty(parents)
                         neurons(j) = neuronType(layerArray(i-1), toleranceFunction, []);
                     else
-                        
-                        weights = parents(randi([1, length(parents)], 1)).layers(i-1).neurons(j).weights + rand(1, layerArray(i-1))/15;
+                        weights = zeros(1, layerArray(i-1));
+                        for k = 1:layerArray(i-1)
+                            weights(k) = parents(randi([1, length(parents)], 1)).layers(i-1).neurons(j).weights(k);
+                        end
+                        weights = weights + rand(1, layerArray(i-1))/5;
                         neurons(j) = neuronType(layerArray(i-1), toleranceFunction, weights);
                     end
                         

@@ -11,35 +11,18 @@ Va = [Vl; Vl; Vr; Vr];
 euler = @(x, x_dot, dt)x + (x_dot*dt); % Euler intergration
 
 
-obstacles = [wallObject(1.2, -1, 1.2, 1), wallObject(4, -3, 4, 1), wallObject(-5, -3, 2, -3), wallObject(-3, 2, 1, 2), ];
-obstacles = [wallObject(-5, -3, 2, -3)];
-sensor = PerfectObservationSensor(obstacles, 0.1, pi/8, 1);
-% hold on
-% grid on
-% for i = 1:4
-%     obstacles(i).inversePlot()
-% end
-% axis([-5,5,-5,5]);
 
-populationSize = 30;
-breedingSize = 6;
-generations = 10;
+populationSize = 1;
+breedingSize = 1;
+generations = 1;
 xi = zeros(1,24);
 xi(19) = -2;
 xi(20) = -1;
 
-fun = @(inputs, weights)sigmf(sum(inputs.*weights), [1,1]);
-fun2 = @(inputs, weights)tanh(sum(inputs.*weights));
-layerArray = [5, 2]; 
 
 
-
-for i = 1:populationSize
-    NeuralNets(i) = NeuralNet(layerArray, @perceptron, fun2, []);
-end
 destination = [3.5, 2.5];
 
-inputs = zeros(length(layerArray), populationSize);
 
 for g = 1:generations 
 
@@ -56,57 +39,48 @@ for g = 1:generations
         headingError = cell2mat({vehicles.psi}) - atan((cell2mat({vehicles.y}) - 2.5)./ (cell2mat({vehicles.xx}) - 3.5));
         v1 = [cos([vehicles.psi])', sin([vehicles.psi])'];
         v2 = [(3.5 - [vehicles.xx])', (2.5 - [vehicles.y] )'];
-        error2 = vectorAngle(v1, v2);%.*curl2D(v1, v2) + pi/2;
-        inputs(1, :) = 2*error2;
-        inputs(2, :) =  curl2D(v1, v2);
-        inputs(3, :) = sqrt((cell2mat({vehicles.y}) - 2.5).^2 + (cell2mat({vehicles.xx}) - 3.5).^2);
+        error2 = vectorAngle(v1, v2).*curl2D(v1, v2);
+        inputs(1, :) = 3*error2;
+        inputs(2, :) = sqrt((cell2mat({vehicles.y}) - 2.5).^2 + (cell2mat({vehicles.xx}) - 3.5).^2);
         distanceError = sqrt((cell2mat({vehicles.y}) - 2.5).^2 + (cell2mat({vehicles.xx}) - 3.5).^2);
         v = v2.^2;
         error3 = sqrt(v(:, 1) + v(:, 2));
         
 
-
         for j = 1:length(vehicles)
-
-            %inputs(3, j) = sqrt(vehicles(j).xdot(20)^2 + vehicles(j).xdot(19)^2);
+            
+            velocity = sqrt(vehicles(j).xdot(20)^2 + vehicles(j).xdot(19)^2);
+            inputs(3, j) = sqrt(vehicles(j).xdot(20)^2 + vehicles(j).xdot(19)^2);
             %inputs(3, j) = sqrt(vehicles(j).xdot(13)^2 + vehicles(j).xdot(14)^2);
             %inputs(3, j) = vehicles(j).xdot(14);
-            V = sensor.detect(vehicles(j).xx, vehicles(j).y, vehicles(j).psi);
-            inputs(4, j) = -V(1);
-            inputs(5, j) = -V(2);
-            output = -15*(0.5-NeuralNets(j).resolve(inputs(:, j)'));
+           
+
+            w1 = 2;
+            w2 = 0.3;
+            w3 = 1;
+            [cos(headingError), sin(headingError)]
+            output = min(max(w1*[cos(headingError), sin(headingError)] + w2*distanceError + w3*1/velocity, -7.5), 7.5)
             vehicles(j).update(output', euler);
         end
         
-        collisions = collisions + collisionCheck(obstacles, vehicles);
 
         %----------------------------------------------%
 
     end
-    collisions(collisions ~= 0) = 1;
-    collisions = sum(collisions, 1);
-    ranking = fitness(vehicles, destination, collisions)
+    ranking = fitness(vehicles, destination, collisions);
     topSelection = ranking(1:breedingSize, 3);
-    parents = NeuralNets(topSelection);
-    NeuralNets = breed(parents, populationSize, layerArray, fun2);
     
     figure(g);
     hold on; grid on; axis([-5,5,-5,5]); 
-    g
     
     for k = 1:length(vehicles)
          plot(vehicles(k).x_matrix(20, :),vehicles(k).x_matrix(19, :)); xlabel('y, m'); ylabel('x, m');
     end
-    for m = 1:length(obstacles)
-        obstacles(m).inversePlot();
-    end
+
     plot(destination(2), destination(1), '*')
 
 
 end
-
-
-fprintf("Simulation Finished\n")
 
 function sorted =  fitness(vehicles, point, collisions)
     
@@ -138,6 +112,7 @@ function sorted =  fitness(vehicles, point, collisions)
         
         
 end
+
 
 function collisions = collisionCheck(obstacles, vehicles)
     
@@ -180,11 +155,8 @@ function alpha = vectorAngle(v1, v2)
 end
 
 function dir = curl2D(v1, v2)
-    
     v1(:, 1) = -v1(:, 1);
     dir = v1.*flip(v2, 2);
     dir  = sign(dir(:, 1) + dir(:, 2));
 end
-
-
 
