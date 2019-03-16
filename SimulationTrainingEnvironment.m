@@ -39,7 +39,7 @@ for i = 1:populationSize
 end
 destination = [3.5, 2.5];
 
-inputs = zeros(length(layerArray), populationSize);
+inputs = zeros(layerArray(1), populationSize);
 
 for g = 1:generations 
 
@@ -57,9 +57,9 @@ for g = 1:generations
         v1 = [cos([vehicles.psi])', sin([vehicles.psi])'];
         v2 = [(3.5 - [vehicles.xx])', (2.5 - [vehicles.y] )'];
         error2 = vectorAngle(v1, v2);%.*curl2D(v1, v2) + pi/2;
-        inputs(1, :) = 2*error2;
-        inputs(2, :) =  curl2D(v1, v2);
-        inputs(3, :) = sqrt((cell2mat({vehicles.y}) - 2.5).^2 + (cell2mat({vehicles.xx}) - 3.5).^2);
+        inputs(1, :) = -error2;
+        inputs(2, :) =  error2;
+        inputs(3, :) = sqrt((2.5 - cell2mat({vehicles.y}) ).^2 + (3.5 - cell2mat({vehicles.xx})).^2);
         distanceError = sqrt((cell2mat({vehicles.y}) - 2.5).^2 + (cell2mat({vehicles.xx}) - 3.5).^2);
         v = v2.^2;
         error3 = sqrt(v(:, 1) + v(:, 2));

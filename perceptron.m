@@ -13,7 +13,7 @@ classdef perceptron < handle
             obj.tolerenceFunction = tolerenceFunction;
             
             if isempty(weights)
-                obj.weights = rand(1, inputNo);
+                obj.weights = 1 - 2*rand(1, inputNo);
             else
                 obj.weights = weights;
             end
@@ -22,6 +22,7 @@ classdef perceptron < handle
         
         function output = input(obj, inputs)
             obj.inputs = inputs;
+            
             output = obj.tolerenceFunction(inputs, obj.weights);
             obj.output = output;
         end

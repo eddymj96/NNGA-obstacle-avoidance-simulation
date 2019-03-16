@@ -10,8 +10,6 @@ Va = [Vl; Vl; Vr; Vr];
 
 euler = @(x, x_dot, dt)x + (x_dot*dt); % Euler intergration
 
-
-
 populationSize = 1;
 breedingSize = 1;
 generations = 1;
@@ -19,10 +17,15 @@ xi = zeros(1,24);
 xi(19) = -2;
 xi(20) = -1;
 
+fun2 = @(inputs, weights)tanh(sum(inputs.*weights));
+layerArray = [3,  2]; 
 
-
+for i = 1:populationSize
+    NeuralNets(i) = NeuralNet(layerArray, @perceptron, fun2, []);
+end
 destination = [3.5, 2.5];
 
+inputs = zeros(layerArray(1), populationSize);
 
 for g = 1:generations 
 
@@ -40,26 +43,33 @@ for g = 1:generations
         v1 = [cos([vehicles.psi])', sin([vehicles.psi])'];
         v2 = [(3.5 - [vehicles.xx])', (2.5 - [vehicles.y] )'];
         error2 = vectorAngle(v1, v2).*curl2D(v1, v2);
-        inputs(1, :) = 3*error2;
-        inputs(2, :) = sqrt((cell2mat({vehicles.y}) - 2.5).^2 + (cell2mat({vehicles.xx}) - 3.5).^2);
+        %inputs(1, :) = 3*error2;
+        %inputs(2, :) = sqrt((cell2mat({vehicles.y}) - 2.5).^2 + (cell2mat({vehicles.xx}) - 3.5).^2);
         distanceError = sqrt((cell2mat({vehicles.y}) - 2.5).^2 + (cell2mat({vehicles.xx}) - 3.5).^2);
+
         v = v2.^2;
         error3 = sqrt(v(:, 1) + v(:, 2));
+        
+        inputs(1, :) = 3*error2;
+        inputs(2, :) = 3*error2;
+        inputs(3, :) = error2;
         
 
         for j = 1:length(vehicles)
             
-            velocity = sqrt(vehicles(j).xdot(20)^2 + vehicles(j).xdot(19)^2);
-            inputs(3, j) = sqrt(vehicles(j).xdot(20)^2 + vehicles(j).xdot(19)^2);
+            
+
+            
             %inputs(3, j) = sqrt(vehicles(j).xdot(13)^2 + vehicles(j).xdot(14)^2);
             %inputs(3, j) = vehicles(j).xdot(14);
            
-
-            w1 = 2;
-            w2 = 0.3;
+% 
+            w1 = 7;
+            w2 = 2;
             w3 = 1;
-            [cos(headingError), sin(headingError)]
-            output = min(max(w1*[cos(headingError), sin(headingError)] + w2*distanceError + w3*1/velocity, -7.5), 7.5)
+%             [cos(headingError), sin(headingError)];
+            output = min(max(w1*[-headingError(j)*distanceError(j), headingError(j)*distanceError(j)] + w2*distanceError(j), -7.5), 7.5)
+           % output = min(max(-15*(0.5-NeuralNets(j).resolve(inputs(:, j)')), -7.5), 7.5)
             vehicles(j).update(output', euler);
         end
         
@@ -67,8 +77,15 @@ for g = 1:generations
         %----------------------------------------------%
 
     end
-    ranking = fitness(vehicles, destination, collisions);
+    
+    %traveledDistance = 
+    collisions(collisions ~= 0) = 1;
+    collisions = sum(collisions, 1);
+    ranking = fitness(vehicles, destination, collisions)
     topSelection = ranking(1:breedingSize, 3);
+    parents = NeuralNets(topSelection);
+    NeuralNets = breed(parents, populationSize, layerArray, fun2);
+    
     
     figure(g);
     hold on; grid on; axis([-5,5,-5,5]); 
