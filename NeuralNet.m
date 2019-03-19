@@ -21,7 +21,7 @@ classdef NeuralNet
                         for k = 1:layerArray(i-1)
                             weights(k) = parents(randi([1, length(parents)], 1)).layers(i-1).neurons(j).weights(k);
                         end
-                        weights = weights + rand(1, layerArray(i-1))/5;
+                        weights = weights + (1 - 2*rand(1, layerArray(i-1)))/25;
                         neurons(j) = neuronType(layerArray(i-1), toleranceFunction, weights);
                     end
                         
@@ -41,5 +41,6 @@ classdef NeuralNet
             end
             outputs = inputs;
         end
+        
     end
 end

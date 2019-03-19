@@ -31,6 +31,7 @@ classdef robot < handle
     fz;
     
     step;
+    distanceTravelled;
     
     % State history storage
     x_matrix;
@@ -83,6 +84,7 @@ classdef robot < handle
             obj.xtra_fric = xtra_fric;
             obj.stepSize = stepSize;
             obj.step = 1;
+            obj.distanceTravelled = 0;
             
             obj.x_matrix = zeros(24, ceil(simTime/stepSize));
             obj.xdot_matrix = zeros(24, ceil(simTime/stepSize));
@@ -100,7 +102,9 @@ classdef robot < handle
            obj.updateRobot();
            
            obj.step = obj.step + 1;
+           
            obj.x = integrationMethod(obj.x, obj.xdot, obj.stepSize);
+           obj.distanceTravelled = obj.distanceTravelled + sqrt((obj.xx - obj.x(19))^2 + (obj.y - obj.x(20))^2);
            %display(integrationMethod(obj.x(1), obj.xdot(1), obj.stepSize));
            
             % For readability in use only
@@ -270,8 +274,14 @@ classdef robot < handle
         end
         
             
-        function plotx(obj)
-            
+        function trimPath(obj)
+            for i = length(obj.x_matrix(20, :)):-1:1
+                if obj.x_matrix(19:20, i) ~= [0;0]
+                    obj.x_matrix(19:20, i:length(obj.x_matrix(20, :))) = zeros(2, length(obj.x_matrix(20, :)) - i+1) + obj.x_matrix(19:20, i);
+                    break
+                end
+            end
+
         end
     end
 end
