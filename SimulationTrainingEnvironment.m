@@ -12,7 +12,7 @@ euler = @(x, x_dot, dt)x + (x_dot*dt); % Euler intergration
 
 
 obstacles = [wallObject(1.2, -1, 1.2, 1), wallObject(4, -3, 4, 1), wallObject(-5, -3, 2, -3), wallObject(-3, 2, 1, 2), ];
-obstacles = [wallObject(-5, -3, 2, -3)];
+%obstacles = [wallObject(-5, -3, 2, -3)];
 sensor = PerfectObservationSensor(obstacles, 0.1, pi/8, 1);
 % hold on
 % grid on
