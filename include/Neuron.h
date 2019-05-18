@@ -1,3 +1,4 @@
+#pragma once
 #include <vector>
 
 /* Neuron Base class; right now only works for basic weight based neuron cells 
@@ -8,4 +9,5 @@ class Neuron
 {
     public:
         virtual float resolve(const std::vector<float> input); 
+        virtual Neuron spawn();
 }

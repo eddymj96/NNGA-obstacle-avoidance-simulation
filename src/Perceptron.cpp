@@ -29,3 +29,10 @@ const float Perceptron::resolve(const std::vector<float> input)
     std::vector<float> output = m_act_func(m_weights, input);
     return output;
 }
+
+Perceptron Perceptron::spawn()
+{
+    Perceptron output(m_input_no, m_act_func);
+
+    return output;
+}

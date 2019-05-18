@@ -1,5 +1,5 @@
 #pragma once 
-#include <vector>
+#include "Neuron"
 
 class NeuralLayer 
 {
@@ -7,7 +7,7 @@ class NeuralLayer
         std::vector<Neuron> m_neurons;
         const int m_neuron_no; 
     public:
-        NeuralLayer(const std::vector<Neuron> neurons);
+        NeuralLayer(Neuron neuron, const neuron_no);
         const std::vector<float> resolve(const std::vector<float> input);
         
 }
