@@ -2,7 +2,7 @@
 #include "NeuralNet.h"
 #include "Perceptron.h"
 #include "MatrixMultiplication.h"
-#include <cmath>
+//#include <cmath>
 
 int main() 
 {
@@ -12,12 +12,12 @@ int main()
 
     auto act_func = [](std::vector<float> weights, std::vector<float> inputs)
     {
-        return tanh(linear_algebra::element_mult(weights, inputs));
+        return (linear_algebra::element_mult(weights, inputs));
     };
 
     // Create model Perceptron with blueprint constructor
 
-    Perceptron perceptron(act_func)
+    Perceptron perceptron<act_func>;
 
 
     // ------------ Generate Neural Net with random weightings-----------------
@@ -27,15 +27,15 @@ int main()
         
         IL   HL   OL    
         
-            o
-            |
-            o     o
-        o    |     |
-        | -> o ->  o
-        o    |     |
-            o     o
-            |
-            o
+             o
+             |
+             o    o
+        o    |    |
+        | -> o -> o
+        o    |    |
+             o    o
+             |
+             o
 
     */
 
@@ -45,12 +45,13 @@ int main()
 
     // ----------------- Test that it provides an output -----------------
 
-    std::vector<float> input;
+    std::vector<float> input, output;
     input = {0.5, 0.8};
+    output = NN.resolve(input);
 
     std::cout << "\n NN output : ";
    
     for(int i=0; i < layer_formation.back(); i++)
         std::cout << output[i] << ' ';
 
-}
+};

@@ -1,6 +1,5 @@
 #pragma once
-
-#include <vector.h>
+#include <vector>
 #include <stdexcept>
 
 //Will replace with CUDA later or some other BLAS library, just for learning purposes for now
@@ -14,15 +13,15 @@ namespace linear_algebra
         }
             
         std::vector<float> output;
-        output.reserve(vector1.size();
+        output.reserve(vector1.size());
 
         // TODO Possibly add OpenMP for SIMD vectorisation
 
-        for(int i = 0; i < vector1.size() ++i) 
+        for(int i = 0; i < vector1.size(); ++i) 
         {
             output.emplace_back(vector1[i]*vector2[i]);
         } 
 
         return output;
-    }
-} // namespace name
+    };
+}; // namespace name
