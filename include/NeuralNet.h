@@ -12,5 +12,5 @@ class NeuralNet
         NeuralNet(const std::vector<int> layer_formation, Neuron master_neuron);
         NeuralNet(const std::vector<int> layer_formation, const std::vector<NeuralNet> parents);
 
-        const std::vector<float> resolve(const std::vector<float> input);
+        const std::vector<float> resolve(std::vector<float> input);
 }

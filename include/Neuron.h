@@ -9,5 +9,5 @@ class Neuron
 {
     public:
         virtual float resolve(const std::vector<float> input); 
-        virtual Neuron spawn();
+        virtual Neuron spawn(const int input_no);
 }

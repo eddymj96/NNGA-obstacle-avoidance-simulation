@@ -6,7 +6,7 @@ NeuralNet::NeuralNet(const std::vector<int> layer_formation, Neuron master_neuro
 
 	for(int i=1;i<layer_formation.size();++i)
 	{
-		m_layers[i] = NeuralLayer(master_neuron, layer_formation[i]);
+		m_layers[i] = NeuralLayer(master_neuron, layer_formation[i], layer_formation[i-1]);
 	}
 }
 
@@ -15,8 +15,14 @@ NeuralNet::NeuralNet(const std::vector<int> layer_formation, const std::vector<N
 	//TODO
 }
 
-const std::vector<float>  NeuralNet::resolve(const std::vector<float> input)
+const std::vector<float> NeuralNet::resolve(std::vector<float> input)
 {
-	for
+
+	for(int i=0;i<m_layers.size();++i)
+	{
+		input.assign(m_layers[i].resolve(input));
+	}
+
+	return input;
 }
 

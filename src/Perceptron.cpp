@@ -2,9 +2,9 @@
 #include <random>
 #include <stdexcept>
 
-Perceptron::Perceptron(const std::vector<float> weights) : m_weights(weights), m_input_no(weights.size()), m_act_func(act_func)
+Perceptron::Perceptron(const std::vector<float> weights, const auto act_func) : m_weights(weights), m_input_no(weights.size()), m_act_func(act_func)
 { 
-
+    
 }
 
 Perceptron::Perceptron(const int input_no, const auto act_func) : m_input_no(input_no), m_act_func(act_func)
@@ -19,6 +19,12 @@ Perceptron::Perceptron(const int input_no, const auto act_func) : m_input_no(inp
 
 }
 
+Perceptron::Perceptron(const auto act_func) : m_act_func(act_func)
+{ 
+    // Blueprint Constructor
+}
+
+
 const float Perceptron::resolve(const std::vector<float> input)
 {
     if(input.size() != m_weights.size())
@@ -30,9 +36,9 @@ const float Perceptron::resolve(const std::vector<float> input)
     return output;
 }
 
-Perceptron Perceptron::spawn()
+Perceptron Perceptron::spawn(const int input_no)
 {
-    Perceptron output(m_input_no, m_act_func);
+    Perceptron output(input_no, m_act_func);
 
     return output;
 }

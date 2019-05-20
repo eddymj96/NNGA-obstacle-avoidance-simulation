@@ -10,6 +10,7 @@ class Perceptron : public Neuron
     public:
         Perceptron(const std::vector<float> weights, const auto act_func);
         Perceptron(const int input_no, const auto act_func);
+        Perceptron(const auto act_func);
         const float resolve(const std::vector<float> input);
-        Perceptron spawn();
+        Perceptron spawn(const int input_no);
 }
