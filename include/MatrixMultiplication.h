@@ -2,6 +2,7 @@
 #include <vector>
 #include <stdexcept>
 
+
 //Will replace with CUDA later or some other BLAS library, just for learning purposes for now
 namespace linear_algebra
 {
@@ -20,6 +21,23 @@ namespace linear_algebra
         for(int i = 0; i < vector1.size(); ++i) 
         {
             output.emplace_back(vector1[i]*vector2[i]);
+        } 
+
+        return output;
+    };
+
+    static float element_mult_sum(const std::vector<float> &vector1, const std::vector<float> &vector2)
+    {
+        if(vector1.size() != vector2.size())
+        {
+            throw std::runtime_error("Vectors are not the same size");
+        }
+            
+        float output = 0;
+
+        for(int i = 0; i < vector1.size(); ++i) 
+        {
+            output += vector1[i]*vector2[i];
         } 
 
         return output;
