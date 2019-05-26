@@ -9,36 +9,35 @@ TEST(PerceptronTest, DefaultConstruction)
 	//create activation function
 	const ACT_FUNC act_func = [](std::vector<float> weights, std::vector<float> inputs)
 	{
-		return std::tanh(linear_algebra::element_mult(weights, inputs));
+		return std::tanh(linear_algebra::element_mult_sum(weights, inputs));
 	};
 
 	std::vector<float> test_weights = {0.1, 0.2, 0.3};
-	std:vector<float> test_inputs = {1, 2, 3};
+	std::vector<float> test_inputs = {1, 2, 3};
 	const float manual_calculation = 1.4;
-	const float manual_tanh_calculation = 0.885351;
+	const float manual_tanh_calculation = 0.88535166;
 
 	//test element multiplication
-	EXPECT_EQ(linear_algebra::element_mult(test_weights, test_inputs),  manual_calculation);
+	EXPECT_FLOAT_EQ(linear_algebra::element_mult_sum(test_weights, test_inputs),  manual_calculation);
 	//test commutative property
-	EXPECT_EQ(linear_algebra::element_mult(test_inputs, test_weights),  manual_calculation);
+	EXPECT_FLOAT_EQ(linear_algebra::element_mult_sum(test_inputs, test_weights),  manual_calculation);
 	//test activation function
-	EXPECT_EQ(act_func(test_weights, test_inputs), manual_tanh_calculation);
+	EXPECT_FLOAT_EQ(act_func(test_weights, test_inputs), manual_tanh_calculation);
 
     
     const std::vector<float> p_in = {2, 4}; 
+	Perceptron test_perceptron(p_in.size(), act_func);
 	const float ouput_upper_bound = 1;
 	const float ouput_lower_bound = -1;
 
 	//test output bounds
-	const std::vector<float> float bound_output_test = perceptron1.resolve(p_in);
-	EXPECT_LT(bound_output_test[0], ouput_upper_bound);
-	EXPECT_LT(bound_output_test[1], ouput_upper_bound );
+	const float bound_output_test = test_perceptron.resolve(p_in);
+	EXPECT_LT(bound_output_test, ouput_upper_bound);
 
-	EXPECT_GT(bound_output_test[0], ouput_lower_bound);
-	EXPECT_GT(bound_output_test[1], ouput_lower_bound);
+	EXPECT_GT(bound_output_test, ouput_lower_bound);
 
 	//test weight bounds
-    const std::vector<float> bound_weights_test = perceptron1.get_weights();
+    const std::vector<float> bound_weights_test = test_perceptron.get_weights();
 
 	EXPECT_LT(bound_weights_test[0], ouput_upper_bound);
 	EXPECT_LT(bound_weights_test[1], ouput_upper_bound);
@@ -55,7 +54,7 @@ TEST(PerceptronTest, DefaultConstruction)
     neuron1 = std::move(per_ptr);
 
 	const int neuron_instance = 0;
-	const int perceptron_isntance = 1;
+	const int perceptron_instance = 1;
 
 	//test that Neuron type smrt_ptr can be assigned to perceptron smrt_ptr
 	ASSERT_EQ(neuron1->get_info(), perceptron_instance);
@@ -75,7 +74,7 @@ TEST(PerceptronTest, DefaultConstruction)
 
 	NeuralLayer layer_test(test_neuron, neuron_no , input_no);
 
-	std::vector<float> layer_ouput;
+	std::vector<float> layer_output;
 	layer_output = layer_test.resolve(test_inputs);
 
 	//ensure output size is as large as no of neurons

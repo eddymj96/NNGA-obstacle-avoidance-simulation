@@ -12,18 +12,34 @@ include_directories(
 	"${CMAKE_SOURCE_DIR}/include/"	 		     
 )
 
-file(GLOB SRC_FILES
+file(GLOB NN_PERCEPTRON_SRC
 
-    "src/*.cpp"
+    "src/Neural*",
+    "src/Perceptron.cpp"
 )
 
-add_executable(NeuralNet ${SRC_FILES})
+file(GLOB EXAMPLE_SRC
+
+    "src/Neural*",
+    "src/Perceptron.cpp",
+    "src/Example.cpp"
+)
+
+message( ${EXAMPLE_SRC} )
+
+add_library(NN_Perceptron SHARED ${NN_PERCEPTRON_SRC})
+
+add_executable(NeuralNetExample ${EXAMPLE_SRC})
+
+find_program(GTEST_INSTALLED gtest)
+
+
 
 # UNIT TESTS
 IF(CMAKE_BUILD_TYPE MATCHES Debug)
   # Don't Install Google Test if its already installed.
   IF(NOT GTEST_INSTALLED MATCHES TRUE)
-  
+
     find_package(Threads REQUIRED)
     
     # Enable ExternalProject CMake module

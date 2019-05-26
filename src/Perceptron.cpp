@@ -45,11 +45,14 @@ const std::vector<float> Perceptron::get_weights()
 
 std::unique_ptr<Neuron> Perceptron::spawn(const int input_no)
 {
-    Perceptron perceptron(input_no, m_act_func);
-    Perceptron *output;
-    output = &perceptron;
+    //Perceptron perceptron(input_no, m_act_func);
+    //TODO possibly fix this 
+    //Perceptron *temp;
+    //temp = &perceptron;
+    //std::unique_ptr<Neuron> output;
+    //output = std::make_unique<Perceptron>(*temp);
 
-    return std::make_unique<Perceptron>(*output);
+    return std::make_unique<Perceptron>(input_no, m_act_func);
 }   
 
 const int Perceptron::get_info()

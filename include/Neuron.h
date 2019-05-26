@@ -9,9 +9,7 @@ should be expanded to involve more complex neuron types like LSTM cells etc
 class Neuron
 {
     public:
-        //Neuron(const int input_no){};
         virtual const float resolve(const std::vector<float> input) {return -1;}; 
         virtual std::unique_ptr<Neuron> spawn(const int input_no) {return std::make_unique<Neuron>(*this);};
-        //virtual ~Neuron() = default;
         virtual const int get_info() {std::cout << "Neuron" << std::endl; return 0;};
 };
