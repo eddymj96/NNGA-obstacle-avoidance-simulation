@@ -6,7 +6,8 @@
 #include <string>
 
 typedef Eigen::Matrix<float, 12, 1>  Vector12f;
-typedef std::function<float(Eigen::Vector12f)> INTEGRATION_FUNCTION;
+typedef Eigen::Matrix<float, 24, 1>  Vector24f;
+typedef std::function<Vector12f(Eigen::Vector12f, Eigen::Vector12f, float)> INTEGRATION_FUNCTION;
 
 
 class WheeledRobot : public Agent
@@ -58,9 +59,9 @@ class WheeledRobot : public Agent
 
     public:
         WheeledRobot(NeuralNet m_net, Eigen::Matrix2f v_inputs, std::vector<Motors> motors, Sensor arc_sensor, Vector12f states, Eigen::Vector3f p_axis)
-        Vector12f update_motors();
+        Vector12f update_motors(Matrix2f &v_inputs);
         Vector12f update_robot();
-        void update();
+        void update(const Eigen::Matrix2f v_inputs, const float stepsize);
         void add_env_params(std::map<dynamic::ENV_STATES, float> &map);
         // Agent overloaded functions
         const std::unique_ptr<Agent> crossover();

@@ -1,5 +1,6 @@
 #include "Robot.h"
 #include <cmath>
+#include <Eigen/Dense>
 
 WheeledRobot::WheeledRobot(NeuralNet net, Eigen::Matrix2f v_inputs, std::vector<Motors> motors,  Sensor arc_sensor, Vector24f states, Eigen::Vector3f p_axis)
 : m_net(net), m_motors(motors), m_arc_sensor(arc_sensor), m_states(states), m_p_axis(p_axis)
@@ -10,7 +11,7 @@ WheeledRobot::WheeledRobot(NeuralNet net, Eigen::Matrix2f v_inputs, std::vector<
 Vector12f WheeledRobot::update_motors()
 {
     Vector12f output_states;
-    for(int i; i<m_motors.size(), ++i)
+    for(int i = 0; i<m_motors.size(), ++i)
     {
         output_states.segment<(3*i + 2)>(3*i)m_motors[i].update();
     }
@@ -104,10 +105,44 @@ Vector12f WheeledRobot::update_robot()
     const float ydot = ((spsi*ctheta)*m_states(u))+(((cpsi*cphi)-(spsi*stheta*sphi))*m_states(v))+(((-sphi*cpsi)-(spsi*cphi*stheta))*m_states(w));
     const float zdot = ((stheta)*m_states(u))+((ctheta*sphi)*m_states(v))+((ctheta*cphi)*m_states(w));
 
+    // Angular Kinematics
+    // In theory +/-90 degrees for pitch is undefined but matlab tan()
+    // gives it a figure. Also this situation should not occur.
+    const float ttheta = std::tan(m_states(theta));
+    const float phidot = m_states(p)+((-sphi*ttheta)*m_states(q))+((cphi*ttheta)*m_states(r)); 
+    const float thetadot = ((cphi)*m_states(q))+((sphi)*m_states(r));
+    const float psidot = ((-sphi/ctheta)*m_states(q))+((cphi/ctheta)*m_states(r));
 
+    // Reassignment 
+
+    Vector12f Xdot;
+    Xdot << motorudot, vdot, wdot, pdot, qdot, rdot, xdot, ydot, zdot, phidot, thetadot, psidot;
             
+    return Xdot;
+}
 
-    return output_states;
+WheeledRobot::update(const Eigen::Matrix2f v_inputs, const float stepsize)
+{
+    const Vector12f Xdot_motor = update_motors(&v_inputs);
+    const Vector12f Xdot_robot = update_robot();
+
+    m_states = m_integration_func(m_states, Xdot_robot, stepsize);
+
+    //TODO inneficient implementation, should fix
+    Vector12f temp_motor_states;
+
+    for(int i = 0; i<m_motors.size(), ++i)
+    {
+       temp_motor_states = m_motors[i].get_states();
+    }
+
+    temp_motor_states = m_integration_func(temp_motor_states, Xdot_motor, stepsize);
+
+    for(int i = 0; i<m_motors.size(), ++i)
+    {
+       temp_motor_states = m_motors[i].set_states(temp_motor_states.segment<(3*i + 2)>(3*i));
+    }
+
 }
 
 
