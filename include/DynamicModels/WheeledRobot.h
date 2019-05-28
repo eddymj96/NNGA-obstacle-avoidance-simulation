@@ -28,6 +28,14 @@ class WheeledRobot : public Agent
         const static float Jz = 0.0334;        // Moment of Inertia about the z-axis, kg.m.m
         const static float mr = 0.1245;        // Moment Arm
 
+        // -------- Dampening Terms --------
+        const static float fric_k = 0.35;
+        const static float fric_m = 0.44;
+        const static float fric_x = 0.22;
+        const static float fric_n = 0.18;
+        const static float fric_y = 1;
+        const static float fric_z = 0.3;
+
         // -------- Variable Robot Properties --------
 
         NeuralNet m_net; 
@@ -41,13 +49,12 @@ class WheeledRobot : public Agent
 
         INTEGRATION_FUNCTION m_integration_func;
         
-        vector3f m_p_axis;
+        vector3f m_p_axis;       
     
     // -------- Environment Specifications -------- 
         dynamic::SharedState g(dynamic::ENV_STATES GRAVITY);           // Gravity, m/s^2
         dynamic::SharedState Cd(dynamic::ENV_STATES DRAG_COEFF);          // Drag Coefficent
         dynamic::SharedState rho(dynamic::ENV_STATES AIR_DENSITY);          // Air density
-        //float W = 21.0719;        // m*g Weight
 
     public:
         WheeledRobot(NeuralNet m_net, Eigen::Matrix2f v_inputs, std::vector<Motors> motors, Sensor arc_sensor, Vector12f states, Eigen::Vector3f p_axis)
