@@ -7,9 +7,14 @@ endif()
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_FLAGS "-Wall")
 
+#Compiler vectorisation and optimisation
+set(CMAKE_CXX_FLAGS_RELEASE "-march=native")
+set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+
 project(neural-net)
 include_directories(
-	"${CMAKE_SOURCE_DIR}/include/"	 		     
+  "${CMAKE_SOURCE_DIR}/include/"	
+  "${CMAKE_SOURCE_DIR}/Eigen/"	     
 )
 
 file(GLOB NN_PERCEPTRON_SRC
