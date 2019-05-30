@@ -11,7 +11,7 @@ NeuralNet::NeuralNet(const std::vector<int> layer_formation, std::unique_ptr<Neu
 	}
 }
 
-NeuralNet::NeuralNet(const std::vector<int> layer_formation, const std::vector<NeuralNet> &parents)
+NeuralNet::NeuralNet(const std::vector<int> layer_formation, const std::vector<std::unique_ptr<Neuron>> &parents)
 {
 	//TODO
 }
@@ -25,4 +25,9 @@ const std::vector<float> NeuralNet::resolve(std::vector<float> &input)
 	}
 
 	return output;
+}
+
+std::vector<int> get_layer_formation()
+{
+	return m_layer_formation;
 }

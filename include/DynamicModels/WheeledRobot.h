@@ -1,7 +1,8 @@
 #pragma once
 #include "Agent.h"
 #include "DynamicInterface.h"
-#include <Eigen/Dense>
+#include "Mutatable.h"
+#include "NeuralNet.h"
 #include <map>
 #include <string>
 
@@ -55,12 +56,24 @@ class WheeledRobot : public Agent
         dynamic::SharedState rho(dynamic::ENV_STATES AIR_DENSITY);          // Air density
 
     public:
-        WheeledRobot(NeuralNet m_net, Eigen::Matrix2f v_inputs, std::vector<Motors> motors, Sensor arc_sensor, Vector12f states, Eigen::Vector3f p_axis)
+    // Default initialisation values, specified at implementationt time so that new robots can be spawned wth same initial conditions
+        static bool initialisation_var;
+        static Eigen::Matrix2f init_v_inputs; 
+        static std::vector<Motors> init_motors; 
+        static Sensor init_arc_sensor;
+        static Vector12f init_states;
+        static Eigen::Vector3f init_p_axis;
+
+        WheeledRobot(NeuralNet m_net)
         Vector12f update_motors(Matrix2f &v_inputs);
         Vector12f update_robot();
         void update(const Eigen::Matrix2f v_inputs, const float stepsize);
         void add_env_params(std::map<dynamic::ENV_STATES, float> &map);
         // Agent overloaded functions
-        const std::unique_ptr<Agent> crossover();
+        const std::unique_ptr<Mutable> expose_mutatable();
+        const std::unique_ptr<Agent> crossover(const std::vector<std::unique_ptr<Agent>> &parents);
         void mutate();
+        VectorXf interact(Environment env);
+
+        
 }

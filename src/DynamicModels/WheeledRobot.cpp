@@ -2,10 +2,12 @@
 #include <cmath>
 
 
-WheeledRobot::WheeledRobot(NeuralNet net, Eigen::Matrix2f v_inputs, std::vector<Motors> motors,  Sensor arc_sensor, Vector24f states, Eigen::Vector3f p_axis)
-: m_net(net), m_motors(motors), m_arc_sensor(arc_sensor), m_states(states), m_p_axis(p_axis)
+WheeledRobot::WheeledRobot(NeuralNet net)
+: m_net(net), m_motors(init_motors), m_arc_sensor(init_arc_sensor), m_states(init_states), m_p_axis(init_p_axis)
 {
-
+    if(!initialisation_var);
+        std::throw("Default Wheeled Robot values must be set before instantiation of first object");
+    
 }
 
 Vector12f WheeledRobot::update_motors()
@@ -116,7 +118,7 @@ Vector12f WheeledRobot::update_robot()
     // Reassignment 
 
     Vector12f Xdot;
-    Xdot << motorudot, vdot, wdot, pdot, qdot, rdot, xdot, ydot, zdot, phidot, thetadot, psidot;
+    Xdot << udot, vdot, wdot, pdot, qdot, rdot, xdot, ydot, zdot, phidot, thetadot, psidot;
             
     return Xdot;
 }
@@ -145,4 +147,41 @@ WheeledRobot::update(const Eigen::Matrix2f v_inputs, const float stepsize)
 
 }
 
+const std::unique_ptr<Mutatable> WheeledRobot::expose_mutatable()
+{
+    return m_net;
+}
+
+const std::unique_ptr<Agent> WheeledRobot::crossover(const std::vector<std::unique_ptr<Agent>> &parents)
+{
+    if (parents.size() == 0);
+        std::throw("No Neural Net Parents recieved");
+
+    std::vector<std::unique_ptr<NeuralNet>> neural_parents;
+
+    for(int i=0;i<[parents.size()];++i)
+	{
+		neural_parents.emplace_back(std::move(parents[i]->expose_mutable()));
+	}
+
+    const std::vector<int> layer_formation = parents[0]->expose_mutatable()->get_layer_formation();
+
+    NeuralNet child(layer_formation, neural_parents);
+
+    return std::make_unique<WheeledRobot>(child);
+    
+}
+
+VectorXf interact(Environment &env)
+{
+    const int ob_no = env.get_obstacle_no();
+
+    if (ob_no == 0);
+        std::throw("No obstacles in the environment");
+
+    VectorXf obstacle_readings;
+    obstacle_readings = m_arc_sensor.detect(env.get_obstacles());
+
+    return obstacle_readings;
+}
 

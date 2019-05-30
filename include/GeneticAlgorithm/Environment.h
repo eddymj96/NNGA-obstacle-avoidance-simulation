@@ -1,10 +1,11 @@
 #pragma once
-
-#include "Agent.h"
+#include "Obstacle.h"
 
 class Environment
-{
+{   
     public:
-        virtual void interact(Agent &agent){};
+        virtual const int get_obstacle_no();
+        virtual const std::vector<std::unique_ptr<Obstacle>> get_obstacles();
+
 }
 

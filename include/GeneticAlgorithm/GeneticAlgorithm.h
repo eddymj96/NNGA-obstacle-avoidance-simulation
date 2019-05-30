@@ -1,6 +1,4 @@
 #include "Agent.h"
-#include "Environment.h"
-
 
 typedef std::function<float(std::vector<float>)> FITNESS_FUNCTION;
 

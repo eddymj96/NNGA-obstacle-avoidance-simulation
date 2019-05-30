@@ -2,7 +2,7 @@
 #include "NeuralLayer.h"
 #include <vector>
 
-class NeuralNet
+class NeuralNet : public Mutatable
 {
     private:
         std::vector<NeuralLayer> m_layers;
@@ -14,4 +14,5 @@ class NeuralNet
         NeuralNet(const std::vector<int> layer_formation, const std::vector<NeuralNet> &parents);
 
         const std::vector<float> resolve(std::vector<float> &input);
+        std::vector<int> get_layer_formation();
 };
