@@ -6,9 +6,7 @@
 #include <string>
 
 typedef Eigen::Matrix<float, 12, 1>  Vector12f;
-typedef Eigen::Matrix<float, 24, 1>  Vector24f;
 typedef std::function<Vector12f(Eigen::Vector12f, Eigen::Vector12f, float)> INTEGRATION_FUNCTION;
-
 
 class WheeledRobot : public Agent
 {
@@ -42,7 +40,6 @@ class WheeledRobot : public Agent
         NeuralNet m_net; 
 
         std::vector<Motor> m_motors;
-
 
         Sensor m_arc_sensor;
         

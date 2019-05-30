@@ -1,6 +1,6 @@
 #include "Robot.h"
 #include <cmath>
-#include <Eigen/Dense>
+
 
 WheeledRobot::WheeledRobot(NeuralNet net, Eigen::Matrix2f v_inputs, std::vector<Motors> motors,  Sensor arc_sensor, Vector24f states, Eigen::Vector3f p_axis)
 : m_net(net), m_motors(motors), m_arc_sensor(arc_sensor), m_states(states), m_p_axis(p_axis)
@@ -13,7 +13,7 @@ Vector12f WheeledRobot::update_motors()
     Vector12f output_states;
     for(int i = 0; i<m_motors.size(), ++i)
     {
-        output_states.segment<(3*i + 2)>(3*i)m_motors[i].update();
+        output_states.segment<(3*i + 2)>(3*i) = m_motors[i].update();
     }
 
     return output_states;
@@ -133,7 +133,7 @@ WheeledRobot::update(const Eigen::Matrix2f v_inputs, const float stepsize)
 
     for(int i = 0; i<m_motors.size(), ++i)
     {
-       temp_motor_states = m_motors[i].get_states();
+       temp_motor_states.temp_motor_states.segment<(3*i + 2)>(3*i) = m_motors[i].get_states();
     }
 
     temp_motor_states = m_integration_func(temp_motor_states, Xdot_motor, stepsize);

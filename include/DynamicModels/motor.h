@@ -1,8 +1,6 @@
 #pragma once
 #include <Eigen/Dense>
 
-typedef Eigen::Matrix<float, 12, 1>  Vector12f;
-
 class motor 
 {
     private:
@@ -23,9 +21,9 @@ class motor
     
     public:
         motor(const float current, const float ang_velo, const float torque, const float frict);
-        update(const float &v_desired, const float &stepsize);
-        Vector12f get_states();
-        void set_states(Vector12f &states);
+        Vector3f update(const float &v_desired, const float &stepsize);
+        Vector3f get_states();
+        void set_states(Vector3f &states);
 
     
 
