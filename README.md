@@ -12,3 +12,8 @@ The dynamic model used was refactored a four wheeled robot model designed by Dr 
 <p align="center">
 <img src="https://github.com/eddymj96/NNGA-obstacle-avoidance-simulation/blob/refactor/Assets/HeirarchyDiagram.png"  width="80%" height="80%"/>
 </p>
+
+## Crossover with Neural Nets
+<p align="center">
+<img src="https://github.com/eddymj96/NNGA-obstacle-avoidance-simulation/blob/refactor/Assets/Crossover.png"  width="80%" height="80%"/>
+</p>
