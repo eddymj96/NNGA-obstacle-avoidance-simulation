@@ -1,6 +1,7 @@
 #include "Perceptron.h"
 #include <random>
 #include <stdexcept>        
+
     
     
 Perceptron::Perceptron(const std::vector<float> weights, const ACT_FUNC act_func): m_weights(weights), m_input_no(weights.size()), m_act_func(act_func)
