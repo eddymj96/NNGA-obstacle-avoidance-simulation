@@ -15,7 +15,7 @@ Vector3f motor::update(const float &v_desired, const float &stepsize)
     const float Idot = ((-Ra*I)-(Ke*w)+ Va)/La;              //  di/dt 
     const float wdot = ((Kt*I)-(bs*w)-tau_friction)/Jm;      // Angular Acceleration
 
-    const eff = (std::abs(I)*-0.1330)+0.6; // Unsure where the "magic" numbers come from
+    const float eff = (std::abs(I)*-0.1330)+0.6; // Unsure where the "magic" numbers come from
 
     const float tdot = ((v_desired == 0) ? (-t)/stepsize : (Kt*I*eff-t)/stepsize); // dT/dt
 

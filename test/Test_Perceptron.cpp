@@ -106,11 +106,11 @@ TEST(PerceptronTest, DefaultConstruction)
 }
 
 class Test_Perceptron : public ::testing::Test {
-protected:
-  Test_Perceptron() {}
+	protected:
+		Test_Perceptron() {}
 
-  virtual void SetUp() {}
+		virtual void SetUp() {}
 
-  virtual void TearDown() {}
+		virtual void TearDown() {}
 };
 

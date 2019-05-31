@@ -42,7 +42,9 @@ int main()
     
     */
 
-    std::vector<int> layer_formation = {3, 5, 8, 4}; 
+    // Define the layer formation in picture above, works for any size neural net
+
+    std::vector<int> layer_formation = {2, 5, 3}; 
 
     NeuralNet NN(layer_formation, neuron);
 
@@ -50,7 +52,10 @@ int main()
     // ----------------- Test that it provides an output -----------------
 
     std::vector<float> input, output;
-    input = {0.5, 0.8, 0.4};
+
+    // Create an arbitrary input
+    input = {0.5, 0.8, 0.4}; 
+    // Calculate the output
     output = NN.resolve(input);
 
     std::cout << "NN output : ";
