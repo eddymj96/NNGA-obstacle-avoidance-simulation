@@ -15,4 +15,5 @@ class NeuralNet : public Mutatable
 
         const std::vector<float> resolve(std::vector<float> &input);
         std::vector<int> get_layer_formation();
+        std::vector<NeuralLayer> get_layer(const int &index);
 };

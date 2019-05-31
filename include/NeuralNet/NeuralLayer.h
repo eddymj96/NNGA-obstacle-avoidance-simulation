@@ -10,5 +10,6 @@ class NeuralLayer
     
         NeuralLayer(std::unique_ptr<Neuron> const &neuron, const int neuron_no, const int input_no);
         const std::vector<float> resolve(const std::vector<float> input);
+        std::unique_ptr<Neuron> NeuralLayer::get_neuron(const int &index);
         
 };

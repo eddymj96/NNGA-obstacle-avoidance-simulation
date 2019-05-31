@@ -18,5 +18,6 @@ class Perceptron : public Neuron
         const float resolve(const std::vector<float> input);
         const std::vector<float> get_weights();
         std::unique_ptr<Neuron> spawn(const int input_no);
+        std::unique_ptr<Neuron> spawn_copy();
         const int get_info();
 }; 

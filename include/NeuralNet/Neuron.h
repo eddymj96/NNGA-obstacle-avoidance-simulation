@@ -11,5 +11,6 @@ class Neuron
     public:
         virtual const float resolve(const std::vector<float> input) {return -1;}; 
         virtual std::unique_ptr<Neuron> spawn(const int input_no) {return std::make_unique<Neuron>(*this);};
+        virtual std::unique_ptr<Neuron> spawn_copy() {return std::make_unique<Neuron>(*this);};
         virtual const int get_info() {std::cout << "Neuron" << std::endl; return 0;};
 };
