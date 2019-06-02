@@ -1,8 +1,9 @@
 #pragma once 
 #include "Environment.h"
+#include <Eigen/Dense>
 
 class Sensor
 {
     public:
-        virtual detect();
+        virtual Eigen::VectorXf detect(std::vector<float> sensor_states, Environment &env);
 }
