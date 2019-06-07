@@ -73,7 +73,7 @@ class WheeledRobot : public Agent
         const std::unique_ptr<Mutable> expose_mutatable();
         const std::unique_ptr<Agent> crossover(const std::vector<std::unique_ptr<Agent>> &parents);
         void mutate();
-        VectorXf interact(Environment env);
+        Eigen::VectorXf interact(Environment env);
 
         
 }

@@ -172,7 +172,7 @@ const std::unique_ptr<Agent> WheeledRobot::crossover(const std::vector<std::uniq
     
 }
 
-VectorXf interact(Environment &env)
+Eigen::VectorXf interact(Environment &env)
 {
     const int ob_no = env.get_obstacle_no();
 

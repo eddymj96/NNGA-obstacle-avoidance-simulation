@@ -1,17 +1,17 @@
 #include "motor.h"
 #include <cmath>
 
-motor::motor(const float current, const float ang_velo, const float torque, const float frict) :
+Motor::Motor(const float current, const float ang_velo, const float torque, const float frict) :
 I(current), w(ang_velo), t(torque), fric_constant(frict + 0.002)
 {
 
 }
 
-Vector3f motor::update(const float &v_desired, const float &stepsize)
+Eigen::Vector3f Motor::update(const float &v_desired, const float &stepsize)
 {
     const float tau_friction = fric_constant*w;
 
-    Vector3f Xdot_motor;
+    Eigen::Vector3f Xdot_motor;
     const float Idot = ((-Ra*I)-(Ke*w)+ Va)/La;              //  di/dt 
     const float wdot = ((Kt*I)-(bs*w)-tau_friction)/Jm;      // Angular Acceleration
 
@@ -24,16 +24,16 @@ Vector3f motor::update(const float &v_desired, const float &stepsize)
     return Xdot_motor;
 }
 
-Vector3f motor::get_states()
+Eigen::Vector3f Motor::get_states()
 {
-    Vector3f states;
+    Eigen::Vector3f states;
 
     states << I, w, t;
     
     return states;
 }
 
-void motor::set_states(Vector3f &states)
+void Motor::set_states(Eigen::Vector3f &states)
 {
     I = states(0);
     w = states(1);
