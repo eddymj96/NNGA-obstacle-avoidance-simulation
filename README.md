@@ -18,9 +18,9 @@ The dynamic model used was refactored a four wheeled robot model designed by Dr 
 <img src="https://github.com/eddymj96/NNGA-obstacle-avoidance-simulation/blob/refactor/Assets/Crossover.png"  width="40%" height="40%"/>
 </p>
 
-# Custom Implementations
+## Custom Implementations
 
-## Sensor: Arc Sensor
+### Sensor: Arc Sensor
 
 <p align="center">
 <img src="https://github.com/eddymj96/NNGA-obstacle-avoidance-simulation/blob/refactor/Assets/PerfectSensor.png"  width="80%" height="80%"/>
