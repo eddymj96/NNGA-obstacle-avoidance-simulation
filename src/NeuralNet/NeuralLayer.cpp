@@ -15,7 +15,7 @@ NeuralLayer::NeuralLayer(std::vector<NeuralLayer> parent_layers, const int neuro
 	// avoid recreating everytime new layer is made
 	std::random_device rd;
     std::mt19937 mt(rd());
-    std::uniform_real_distribution<int> parent_index(0, parent_layers.size()-1);
+    std::uniform_int_distribution<int> parent_index(0, parent_layers.size()-1);
 
     m_neurons.reserve(m_neuron_no);
 	for(int i=0; i<m_neuron_no;++i)
